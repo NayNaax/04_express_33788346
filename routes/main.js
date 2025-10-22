@@ -4,24 +4,32 @@ const router = express.Router();
 
 // Handle the main routes
 // Handle the routes
-router.get("/", (req, res) => res.send("Hello World!")); // Main page of localhost:8000
+router.get("/", (req, res) => {
+    // Render the index.ejs page
+    res.render("pages/index");
+});
 
 router.get("/welcome/:name", (req, res) => {
     const { name } = req.params;
-    res.send("Welcome " + name);
-}); // Sub page of localhost:8000/welcome
+    // Render the welcome.ejs page and pass the 'name' variable
+    res.render("pages/welcome", { name: name });
+});
 
-router.get("/about", (req, res) => res.send("<h1>This is the about page</h1>"));
-// Sub page - localhost:8000/about
+router.get("/about", (req, res) => {
+    // Render the about.ejs page
+    res.render("pages/about");
+});
 
-router.get("/contact", (req, res) =>
-    res.send("<h1>This is the contact page. my github is https://github.com/NayNaax/04_express_33788346</h1>")
-); // Sub page - localhost:8000/contact
+router.get("/contact", (req, res) => {
+    // Render the contact.ejs page
+    res.render("pages/contact");
+});
 
 router.get("/date", (req, res) => {
-    const d = new Date(); // constant date function to call upon
-    res.send("This is the date: " + d.toLocaleString());
-}); // Sub page - localhost:8000/date
+    const d = new Date();
+    // Render the date.ejs page and pass the 'dateString' variable
+    res.render("pages/date", { dateString: d.toLocaleString() });
+});
 
 // Chained route handlers
 router.get(
@@ -31,13 +39,15 @@ router.get(
         next(); // Pass control to the next handler
     },
     (req, res) => {
+        // You can just send a simple message or create another EJS page for this
         res.send("This is the second handler!");
     }
 );
 
-// Route to render the a.html file
+// Route to render the a.txt file
+// This route is fine as-is, since it's meant to send a file, not a webpage
 router.get("/file", (req, res) => {
-    res.sendFile(__dirname + "/a.txt");
+    res.sendFile(process.cwd() + "/routes/a.txt"); // Use process.cwd() for a more reliable path
 });
 
 // Export the router object so index.js can access it
